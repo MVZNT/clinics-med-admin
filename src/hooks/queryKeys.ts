@@ -1,0 +1,12 @@
+export enum queryKeys {
+    // admin
+    LOGIN = "LOGIN",
+    GET_DASHBOARD = "GET_DASHBOARD",
+    GET_ADMIN_INFO = "GET_ADMIN_INFO",
+
+    // clinics
+    CREATE_CLINIC = "CREATE_CLINIC",
+    GET_CLINICS = "GET_CLINICS",
+    UPDATE_CLINIC = "UPDATE_CLINIC",
+    DELETE_CLINIC = "DELETE_CLINIC",
+}
