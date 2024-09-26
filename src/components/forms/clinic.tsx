@@ -75,10 +75,22 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
         formData.append("descr", values.descr);
         formData.append("location", values.location)
         formData.append("phone_number", values.phone_number)
-        formData.append("website_url", values.website_url)
-        formData.append("telegram_url", values.telegram_url)
-        formData.append("instagram_url", values.instagram_url)
-        formData.append("youtube_url", values.youtube_url)
+
+        if (values.website_url) {
+            formData.append("website_url", values.website_url)
+        }
+
+        if (values.telegram_url) {
+            formData.append("telegram_url", values.telegram_url)
+        }
+
+        if (values.instagram_url) {
+            formData.append("instagram_url", values.instagram_url)
+        }
+
+        if (values.youtube_url) {
+            formData.append("youtube_url", values.youtube_url)
+        }
 
         if (week_start_day) {
             formData.append("week_start_day", week_start_day)
