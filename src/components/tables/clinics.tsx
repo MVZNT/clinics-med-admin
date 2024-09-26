@@ -18,7 +18,7 @@ const ClinicsTable = ({data, onEdit, onDelete}: ClinicTableProps) => {
                     <TableRow>
                         <TableHead className={"min-w-56"}>ID</TableHead>
                         <TableHead className={"min-w-56"}>Name</TableHead>
-                        <TableHead className={"min-w-40 pl-7"}>Image</TableHead>
+                        <TableHead className={"min-w-40 pl-7"}>Logo</TableHead>
                         <TableHead className={"min-w-40"}>Description</TableHead>
                         <TableHead className={"min-w-40"}>CreatedAt</TableHead>
                         <TableHead className={"min-w-40"}>UpdatedAt</TableHead>
@@ -33,7 +33,7 @@ const ClinicsTable = ({data, onEdit, onDelete}: ClinicTableProps) => {
                                 <TableCell>{clinic.id}</TableCell>
                                 <TableCell>{clinic.name}</TableCell>
                                 <TableCell>
-                                    <img src={clinic.image} alt="logo-image" className={"w-24 h-14"}/>
+                                    <img src={clinic.logo} alt="logo-image" className={"w-24 h-14"}/>
                                 </TableCell>
                                 <TableCell>{clinic.descr.length <= 50 ? clinic.descr : `${clinic.descr.slice(0, 51)}...`}</TableCell>
                                 <TableCell>{dateFormatter(clinic.createdAt)}</TableCell>

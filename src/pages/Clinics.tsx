@@ -41,6 +41,7 @@ const Clinics = () => {
         }
     }
 
+
     useEffect(() => {
         getClinicsQuery.refetch()
     }, [keyword, page, limit]);
@@ -49,11 +50,19 @@ const Clinics = () => {
         <>
             <Navbar name="Clinics"/>
 
-            <DialogModal isOpen={createClinicModal.isOpen} onClose={createClinicModal.onClose}>
+            <DialogModal
+                isOpen={createClinicModal.isOpen}
+                onClose={createClinicModal.onClose}
+                className={"w-[900px] mt-20"}
+            >
                 <ClinicForm action={"CREATE"}/>
             </DialogModal>
 
-            <DialogModal isOpen={updateClinicModal.isOpen} onClose={updateClinicModal.onClose}>
+            <DialogModal
+                isOpen={updateClinicModal.isOpen}
+                onClose={updateClinicModal.onClose}
+                className={"w-[900px] mt-20"}
+            >
                 <ClinicForm action={"EDIT"} data={clinic}/>
             </DialogModal>
 
@@ -88,7 +97,6 @@ const Clinics = () => {
                                     setLimit(pageSize);
                                 }}
                             />
-
                         </>
             }
         </>

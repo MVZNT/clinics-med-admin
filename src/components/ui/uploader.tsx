@@ -3,7 +3,6 @@ import * as React from "react";
 import {useRef, useState} from "react";
 import {FiEdit} from "react-icons/fi";
 import {LuUpload} from "react-icons/lu";
-import {PhotoProvider, PhotoView} from "react-photo-view"
 
 type UploadProps = {
     url?: string;
@@ -35,21 +34,15 @@ const Uploader = ({url, className, setFile, placeholder}: UploadProps) => {
             onClick={onChooseFile}
         >
             <div className="flex gap-2 items-center ml-2">
-                <PhotoProvider>
-                    {selectedFile ? (
-                        <PhotoView src={URL.createObjectURL(selectedFile)}>
-                            <img src={URL.createObjectURL(selectedFile)} alt={"#"} className={`size-20 ${className}`}/>
-                        </PhotoView>
-                    ) : (
-                        <PhotoView src={url}>
-                            <img
-                                src={url}
-                                alt={"#"}
-                                className={`size-32 ${className}`}
-                            />
-                        </PhotoView>
-                    )}
-                </PhotoProvider>
+                {selectedFile ? (
+                    <img src={URL.createObjectURL(selectedFile)} alt={"#"} className={`size-20 ${className}`}/>
+                ) : (
+                    <img
+                        src={url}
+                        alt={"#"}
+                        className={`size-32 ${className}`}
+                    />
+                )}
             </div>
 
             <div>
