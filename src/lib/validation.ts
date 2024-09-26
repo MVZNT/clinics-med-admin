@@ -20,10 +20,10 @@ export const ClinicSchema = z.object({
     descr: z.string({required_error: "Required!"}).min(1, "Required!"),
     location: z.string({required_error: "Required!"}).min(1, "Required!"),
     phone_number: z.string({required_error: "Required!"}),
-    website_url: z.string({required_error: "Required!"}).min(1, "Required!"),
-    instagram_url: z.string({required_error: "Required!"}).min(1, "Required!"),
-    youtube_url: z.string({required_error: "Required!"}).min(1, "Required!"),
-    telegram_url: z.string({required_error: "Required!"}).min(1, "Required!"),
+    website_url: z.string().optional(),
+    instagram_url: z.string().optional(),
+    youtube_url: z.string().optional(),
+    telegram_url: z.string().optional(),
     daily_work_start_time: z.string().optional(),
     daily_work_end_time: z.string().optional()
 });
