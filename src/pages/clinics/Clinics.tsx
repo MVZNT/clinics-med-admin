@@ -1,13 +1,13 @@
-import {Navbar} from "../components";
+import {Navbar} from "../../components";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import ClinicsTable from "@/components/tables/clinics.tsx";
-import {useCreateClinicModal, useUpdateClinicModal} from "@/hooks/useZustand.ts";
+import {useCreateClinicModal} from "@/hooks/useZustand.ts";
 import {DialogModal} from "@/components/ui/dialog.tsx";
 import ClinicForm from "@/components/forms/clinic.tsx";
 import {useEffect, useState} from "react";
 import {useDeleteClinic, useGetClinics} from "@/hooks/useClinic.ts";
-import {ClinicType, GetClinicsType} from "@/types/clinic";
+import {GetClinicsType} from "@/types/clinic";
 import {Pagination} from "antd";
 import StateShower from "@/components/stateShower.tsx";
 
@@ -16,23 +16,12 @@ const Clinics = () => {
     const [limit, setLimit] = useState<number>(10);
     const [keyword, setKeyword] = useState<string>("");
 
-    const [clinic, setClinic] = useState<ClinicType>();
 
     const getClinicsQuery = useGetClinics(page, limit, keyword);
     const clinicsData: GetClinicsType = getClinicsQuery.data?.data
 
     const createClinicModal = useCreateClinicModal()
-    const updateClinicModal = useUpdateClinicModal()
-
     const deleteClinicMutation = useDeleteClinic()
-
-    const onEdit = (id: number) => {
-        const findClinic = clinicsData?.clinics?.find(clinic => clinic.id === id)
-        if (findClinic) {
-            setClinic(findClinic)
-            updateClinicModal.onOpen()
-        }
-    }
 
     const onDelete = (id: number) => {
         const isOk = confirm("Are you sure to delete clinic!")
@@ -40,7 +29,6 @@ const Clinics = () => {
             deleteClinicMutation.mutate(id)
         }
     }
-
 
     useEffect(() => {
         getClinicsQuery.refetch()
@@ -58,13 +46,6 @@ const Clinics = () => {
                 <ClinicForm action={"CREATE"}/>
             </DialogModal>
 
-            <DialogModal
-                isOpen={updateClinicModal.isOpen}
-                onClose={updateClinicModal.onClose}
-                className={"w-[900px] mt-20"}
-            >
-                <ClinicForm action={"EDIT"} data={clinic}/>
-            </DialogModal>
 
             <div className={"flex justify-between"}>
                 <div className={"w-1/4"}>
@@ -81,7 +62,6 @@ const Clinics = () => {
                         ? <StateShower id={"no_data"} name={"No data found!"}/>
                         : <>
                             <ClinicsTable
-                                onEdit={onEdit}
                                 onDelete={onDelete}
                                 data={clinicsData?.clinics}
                             />

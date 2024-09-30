@@ -13,10 +13,7 @@ export type ClinicType = {
     instagram_url: string,
     youtube_url: string
     telegram_url: string,
-    week_start_day: string,
-    "week_end_day": string,
-    "daily_work_start_time": string
-    "daily_work_end_time": string
+    regionId: number,
     createdAt: string,
     updatedAt: string,
 }

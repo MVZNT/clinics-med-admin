@@ -12,3 +12,15 @@ export const useUpdateClinicModal = create<ModalProps>((set) => ({
     onOpen: () => set({isOpen: true}),
     onClose: () => set({isOpen: false}),
 }));
+
+export const useCreateWorkingHoursModal = create<ModalProps>((set) => ({
+    isOpen: false,
+    onOpen: () => set({isOpen: true}),
+    onClose: () => set({isOpen: false}),
+}));
+
+export const useUpdateWorkingHoursModal = create<ModalProps>((set) => ({
+    isOpen: false,
+    onOpen: () => set({isOpen: true}),
+    onClose: () => set({isOpen: false}),
+}));

@@ -7,14 +7,15 @@ import * as z from "zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
 import {ClinicType} from "@/types/clinic";
 import {useState} from "react";
-import {customToast, weekDays} from "@/lib/utils.ts";
+import {customToast} from "@/lib/utils.ts";
 import {useCreateClinic, useUpdateClinic} from "@/hooks/useClinic.ts";
 import {Input, MaskInput} from "@/components/ui/input.tsx";
-import Select from "react-select"
 import Uploader from "@/components/ui/uploader.tsx";
 import MultiUploader from "@/components/ui/multi-uploader.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Textarea} from "@/components/ui/textarea.tsx";
+import Select from "react-select"
+import {regionsData} from "@/constants";
 
 
 type ClinicFormType = {
@@ -26,9 +27,8 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
     const [logo, setLogo] = useState<File>();
     const [files, setFiles] = useState<File[]>([]);
 
-    const [week_start_day, setWeekStartDay] = useState()
-    const [week_end_day, setWeekEndDay] = useState()
     const [deletedImages, setDeletedImages] = useState<any>([]);
+    const [regionId, setRegionId] = useState<number>();
 
     const createClinicMutation = useCreateClinic();
     const updateClinicMutation = useUpdateClinic()
@@ -44,8 +44,6 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
             website_url: data?.website_url,
             phone_number: data?.phone_number,
             location: data?.location,
-            daily_work_start_time: data?.daily_work_start_time,
-            daily_work_end_time: data?.daily_work_end_time,
         }
     });
 
@@ -76,6 +74,10 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
         formData.append("location", values.location)
         formData.append("phone_number", values.phone_number)
 
+        if (regionId) {
+            formData.append("regionId", regionId.toString())
+        }
+
         if (values.website_url) {
             formData.append("website_url", values.website_url)
         }
@@ -92,23 +94,6 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
             formData.append("youtube_url", values.youtube_url)
         }
 
-        if (week_start_day) {
-            formData.append("week_start_day", week_start_day)
-        }
-
-        if (week_end_day) {
-            formData.append("week_end_day", week_end_day)
-        }
-
-        if (values.daily_work_start_time) {
-            formData.append("daily_work_start_time", values.daily_work_start_time)
-        }
-
-        if (values.daily_work_end_time) {
-            formData.append("daily_work_end_time", values.daily_work_end_time)
-        }
-
-        console.log(logo)
 
         if (action === "CREATE") {
             createClinicMutation.mutate(formData as any)
@@ -126,12 +111,9 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col gap-5"
+                className="flex flex-col gap-5 bg-white p-4 border shadow rounded-md"
             >
-                <h1 className="text-[22px] font-semibold text-center">{action === "CREATE" ? "Create Clinic" : "Update Clinic"}</h1>
-
-
-                <div className={"grid grid-cols-3 gap-5 "}>
+                <div className={"grid grid-cols-4 gap-5 "}>
                     <FormField
                         control={form.control}
                         name="name"
@@ -175,83 +157,22 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
                     />
 
                     <div className={"flex flex-col gap-2"}>
-                        <h1 className={"font-medium text-sm"}>Week day (start)</h1>
+                        <span className={"text-sm font-medium"}>Region:</span>
                         <Select
-                            className="text-sm"
-                            defaultValue={data?.week_start_day
-                                ? {
-                                    value: weekDays.find(day => day.value === data.week_start_day)?.value,
-                                    label: weekDays.find(day => day.value === data.week_start_day)?.label
+                            options={regionsData.map(region => {
+                                return {
+                                    value: region.id,
+                                    label: region.name,
                                 }
-                                : undefined
-                            }
-                            onChange={(selectedOption: any) => setWeekStartDay(selectedOption?.value)}
-                            options={weekDays.map(day => ({
-                                value: day.value,
-                                label: day.label,
-                            }))}
+                            })}
+                            placeholder={"Choose"}
+                            className={"text-sm"}
+                            defaultValue={data?.regionId ? {
+                                value: regionsData.find(region => region.id === data?.regionId)?.id,
+                                label: regionsData.find(region => region.id === data?.regionId)?.name,
+                            } : undefined}
+                            onChange={(selectedOption: any) => setRegionId(selectedOption?.value)}
                         />
-                    </div>
-
-
-                    <div className={"flex flex-col gap-2"}>
-                        <h1 className={"font-medium text-sm"}>Week day (end)</h1>
-                        <Select
-                            className="text-sm"
-                            defaultValue={data?.week_end_day
-                                ? {
-                                    value: weekDays.find(day => day.value === data.week_end_day)?.value,
-                                    label: weekDays.find(day => day.value === data.week_end_day)?.label
-                                }
-                                : undefined
-                            }
-                            onChange={(selectedOption: any) => setWeekEndDay(selectedOption?.value)}
-                            options={weekDays.map(day => ({
-                                value: day.value,
-                                label: day.label,
-                            }))}
-                        />
-                    </div>
-
-                    <div className={"grid grid-cols-2 gap-5"}>
-                        <FormField
-                            control={form.control}
-                            name="daily_work_start_time"
-                            render={({field}) => (
-                                <FormItem>
-                                    <FormLabel>Time (start):</FormLabel>
-                                    <FormControl>
-                                        <MaskInput
-                                            mask={"99:99"}
-                                            placeholder={"00:00"}
-                                            className={"text-sm"}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="daily_work_end_time"
-                            render={({field}) => (
-                                <FormItem>
-                                    <FormLabel>Time (end):</FormLabel>
-                                    <FormControl>
-                                        <MaskInput
-                                            mask={"99:99"}
-                                            placeholder={"00:00"}
-                                            className={"text-sm"}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
-
                     </div>
                 </div>
 
@@ -349,12 +270,11 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
                     </div>
                 </div>
 
-                <div className={"flex justify-center"}>
+                <div className={`flex ${action === "CREATE" ? "justify-end" : "justify-start"}`}>
                     <Button
                         isLoading={createClinicMutation.isPending || updateClinicMutation.isPending}
-                        className={"w-1/4"}
                     >
-                        Qo'shish
+                        {action === "CREATE" ? "Create clinic" : "Save changes"}
                     </Button>
                 </div>
             </form>

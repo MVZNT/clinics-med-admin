@@ -20,10 +20,16 @@ export const ClinicSchema = z.object({
     descr: z.string({required_error: "Required!"}).min(1, "Required!"),
     location: z.string({required_error: "Required!"}).min(1, "Required!"),
     phone_number: z.string({required_error: "Required!"}),
-    website_url: z.string().optional(),
-    instagram_url: z.string().optional(),
-    youtube_url: z.string().optional(),
-    telegram_url: z.string().optional(),
-    daily_work_start_time: z.string().optional(),
-    daily_work_end_time: z.string().optional()
+    website_url: z.any().optional(),
+    instagram_url: z.any().optional(),
+    youtube_url: z.any().optional(),
+    telegram_url: z.any().optional(),
+});
+
+export const WorkingHoursSchema = z.object({
+    day: z.any().optional(),
+    startTime: z.any().optional(),
+    endTime: z.any().optional(),
+    lunchStartTime: z.any().optional(),
+    lunchEndTime: z.any().optional(),
 });

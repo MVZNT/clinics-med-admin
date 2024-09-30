@@ -3,22 +3,23 @@ import {queryKeys} from "@/hooks/queryKeys.ts";
 import {customToast} from "@/lib/utils.ts";
 import {api} from "@/services/configs";
 import {queryClient} from "@/main.tsx";
-import {useCreateClinicModal, useUpdateClinicModal} from "@/hooks/useZustand.ts";
+import {useUpdateClinicModal} from "@/hooks/useZustand.ts";
+import {useNavigate} from "react-router-dom";
 
 export const useCreateClinic = () => {
-    const createClinicModal = useCreateClinicModal()
+    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: [queryKeys.CREATE_CLINIC],
         mutationFn: async (data: any) => {
             return await api.post("/clinics", data)
         },
-        onSuccess() {
+        onSuccess(res) {
             customToast("SUCCESS", "Clinic is created successfully!");
             queryClient.invalidateQueries({
                 queryKey: [queryKeys.GET_CLINICS],
             })
-            createClinicModal.onClose()
+            navigate(`/edit/${res.data?.info?.id}`);
         },
         onError(error: any) {
             console.log(error);
@@ -41,6 +42,15 @@ export const useGetClinics = (page: number, limit: number, keyword?: string) => 
                     keyword,
                 }
             })
+        },
+    });
+};
+
+export const useGetSingleClinic = (clinicId: number) => {
+    return useQuery({
+        queryKey: [queryKeys.GET_SINGLE_CLINIC],
+        queryFn: async () => {
+            return await api.get(`/clinics/${clinicId}`)
         },
     });
 };

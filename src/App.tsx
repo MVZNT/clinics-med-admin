@@ -3,6 +3,8 @@ import {AuthLayout, RootLayout} from "./layouts";
 import {NotFound} from "./pages";
 import {AuthChecker} from "./middlewares";
 import {Clinics} from "@/pages";
+import CreateClinic from "@/pages/clinics/CreateClinic.tsx";
+import EditClinic from "@/pages/clinics/EditClinic.tsx";
 
 function App() {
     return (
@@ -16,6 +18,8 @@ function App() {
                 }
             >
                 <Route index element={<Clinics/>}/>
+                <Route path={"/create"} element={<CreateClinic/>}/>
+                <Route path={"/edit/:clinicId"} element={<EditClinic/>}/>
                 <Route path="*" element={<NotFound/>}/>
             </Route>
 

@@ -40,7 +40,7 @@ const MultiUploader = ({
     };
 
     return (
-        <div className="grid grid-cols-5 gap-5">
+        <div className="grid grid-cols-8 gap-0">
             <div
                 className="flex justify-center items-center bg-white rounded-md border-2 border-dashed border-black/20 size-32 cursor-pointer relative">
                 <div className="text-center">
@@ -87,7 +87,9 @@ const MultiUploader = ({
                         className="size-32 rounded-md bg-cover bg-center relative flex justify-center items-center group"
                     >
                         <div
-                            className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300 rounded-md"></div>
+                            className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300 rounded-md">
+                        </div>
+
                         <div className="hidden group-hover:flex gap-2 z-10">
                             <PhotoView src={URL.createObjectURL(file)}>
                                 <CgEye className="text-white text-[19px] cursor-pointer"/>

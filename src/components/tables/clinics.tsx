@@ -3,14 +3,16 @@ import {ClinicType} from "@/types/clinic";
 import {dateFormatter} from "@/lib/utils.ts";
 import {AiOutlineDelete} from "react-icons/ai";
 import {FiEdit} from "react-icons/fi";
+import {useNavigate} from "react-router-dom";
 
 type ClinicTableProps = {
     data: ClinicType[],
-    onEdit: (id: number) => void,
     onDelete: (id: number) => void,
 }
 
-const ClinicsTable = ({data, onEdit, onDelete}: ClinicTableProps) => {
+const ClinicsTable = ({data, onDelete}: ClinicTableProps) => {
+    const navigate = useNavigate();
+
     return (
         <div className={"bg-white shadow rounded-md"}>
             <Table className="max-lg:w-[700px]">
@@ -41,7 +43,7 @@ const ClinicsTable = ({data, onEdit, onDelete}: ClinicTableProps) => {
                                 <TableCell>
                                     <div className="flex gap-2">
                                         <FiEdit
-                                            onClick={() => onEdit(clinic.id)}
+                                            onClick={() => navigate(`/edit/${clinic.id}`)}
                                             className="text-[18px] text-amber-700 opacity-60 cursor-pointer"
                                         />
 

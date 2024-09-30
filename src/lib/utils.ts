@@ -54,3 +54,13 @@ export const weekDays = [
     {value: "SATURDAY", label: "Shanba"},
     {value: "SUNDAY", label: "Yakshanba"}
 ];
+
+
+export const localizedDay = (day: string) => {
+    const findDay = weekDays.find(weekDay => weekDay.value === day)
+    if (!findDay) {
+        return day
+    } else {
+        return findDay.label
+    }
+}
