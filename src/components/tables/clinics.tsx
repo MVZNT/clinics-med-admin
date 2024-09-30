@@ -31,7 +31,11 @@ const ClinicsTable = ({data, onDelete}: ClinicTableProps) => {
                 <TableBody>
                     {
                         data?.map(clinic => (
-                            <TableRow key={clinic.id}>
+                            <TableRow
+                                className={"cursor-pointer"}
+                                key={clinic.id}
+                                onClick={() => navigate(`/edit/${clinic.id}`)}
+                            >
                                 <TableCell>{clinic.id}</TableCell>
                                 <TableCell>{clinic.name}</TableCell>
                                 <TableCell>
@@ -48,7 +52,10 @@ const ClinicsTable = ({data, onDelete}: ClinicTableProps) => {
                                         />
 
                                         <AiOutlineDelete
-                                            onClick={() => onDelete(clinic.id)}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onDelete(clinic.id)
+                                            }}
                                             className={"text-[19px] text-destructive cursor-pointer"}
                                         />
                                     </div>
