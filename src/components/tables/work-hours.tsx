@@ -61,8 +61,8 @@ const WorkHoursTable = ({data}: ClinicTableProps) => {
                             <TableRow key={workHours.id}>
                                 {/*<TableCell>{workHours.id}</TableCell>*/}
                                 <TableCell>{localizedDay(workHours.day)}</TableCell>
-                                <TableCell>{`${workHours.lunchStartTime}-${workHours.lunchEndTime}`}</TableCell>
-                                <TableCell>{`${workHours.startTime}-${workHours.endTime}`}</TableCell>
+                                <TableCell>{`${workHours.lunchStartTime || "xx:xx"}-${workHours.lunchEndTime || "xx:xx"}`}</TableCell>
+                                <TableCell>{`${workHours.startTime || "xx:xx"}-${workHours.endTime || "xx:xx"}`}</TableCell>
                                 {/*<TableCell>{dateFormatter(workHours.createdAt)}</TableCell>*/}
                                 {/*<TableCell>{dateFormatter(workHours.updatedAt)}</TableCell>*/}
                                 <TableCell>

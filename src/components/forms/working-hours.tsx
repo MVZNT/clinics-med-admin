@@ -21,7 +21,7 @@ type ClinicFormType = {
 }
 
 const WorkingHoursForm = ({action, data, clinicId}: ClinicFormType) => {
-    const [day, setWorkDay] = useState<string>(data?.day!)
+    const [day, setWorkDay] = useState<string[] | string>(data?.day!)
 
     const createWorkingHoursMutation = useCreateWorkingHours()
     const updateWorkingHoursMutation = useUpdateWorkingHours()
@@ -37,15 +37,18 @@ const WorkingHoursForm = ({action, data, clinicId}: ClinicFormType) => {
     });
 
     function onSubmit(values: z.infer<typeof WorkingHoursSchema>) {
-        if (!day) {
+        if (!day || day?.length === 0) {
             return customToast("ERROR", "Please choose day!")
         }
-        
+
         values.day = day
         if (action === "CREATE") {
+            delete values.day
+            // @ts-ignore
+            values["days"] = day
             createWorkingHoursMutation.mutate({
                 ...values,
-                clinicId
+                clinicId,
             })
         } else {
             updateWorkingHoursMutation.mutate({
@@ -71,21 +74,40 @@ const WorkingHoursForm = ({action, data, clinicId}: ClinicFormType) => {
                 <div className={"flex flex-col gap-2"}>
                     <span className={"font-medium text-sm"}>Day</span>
 
-                    <Select
-                        className="text-sm"
-                        defaultValue={data?.day
-                            ? {
-                                value: weekDays.find(day => day.value === data.day)?.value,
-                                label: weekDays.find(day => day.value === data.day)?.label
-                            }
-                            : undefined
-                        }
-                        onChange={(selectedOption) => setWorkDay(selectedOption?.value!)}
-                        options={weekDays.map(day => ({
-                            value: day.value,
-                            label: day.label,
-                        }))}
-                    />
+                    {
+                        action === "EDIT" ?
+                            <Select
+                                className="text-sm"
+                                defaultValue={data?.day
+                                    ? {
+                                        value: weekDays.find(day => day.value === data.day)?.value,
+                                        label: weekDays.find(day => day.value === data.day)?.label
+                                    }
+                                    : undefined
+                                }
+                                onChange={(selectedOption) => setWorkDay(selectedOption?.value!)}
+                                options={weekDays.map(day => ({
+                                    value: day.value,
+                                    label: day.label,
+                                }))}
+                            /> :
+                            <Select
+                                isMulti
+                                className="text-sm"
+                                defaultValue={data?.day
+                                    ? {
+                                        value: weekDays.find(day => day.value === data.day)?.value,
+                                        label: weekDays.find(day => day.value === data.day)?.label
+                                    }
+                                    : undefined
+                                }
+                                onChange={(selectedOption) => setWorkDay(selectedOption?.map(option => option.value!))}
+                                options={weekDays.map(day => ({
+                                    value: day.value,
+                                    label: day.label,
+                                }))}
+                            />
+                    }
                 </div>
 
                 <div className={"grid grid-cols-2 gap-5"}>
