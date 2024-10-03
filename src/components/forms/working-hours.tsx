@@ -11,7 +11,7 @@ import Select from "react-select";
 import {customToast, weekDays} from "@/lib/utils";
 import {useState} from "react";
 import {MaskInput} from "../ui/input";
-import {useCreateWorkingHours, useUpdateWorkingHours} from "@/hooks/useWorkingHours.ts";
+import {useCreateWorkingHours, useGetWorkingHours, useUpdateWorkingHours} from "@/hooks/useWorkingHours.ts";
 
 
 type ClinicFormType = {
@@ -25,6 +25,9 @@ const WorkingHoursForm = ({action, data, clinicId}: ClinicFormType) => {
 
     const createWorkingHoursMutation = useCreateWorkingHours()
     const updateWorkingHoursMutation = useUpdateWorkingHours()
+
+    const getWorkingHours = useGetWorkingHours(+clinicId!)
+    const workingHoursData: WorkingHoursType[] = getWorkingHours.data?.data?.workingHours
 
     const form = useForm<z.infer<typeof WorkingHoursSchema>>({
         resolver: zodResolver(WorkingHoursSchema),
@@ -61,6 +64,10 @@ const WorkingHoursForm = ({action, data, clinicId}: ClinicFormType) => {
         }
     }
 
+    if (getWorkingHours.isLoading) {
+        return <h1>loading...</h1>
+    }
+
     return (
         <Form {...form}>
             <form
@@ -86,10 +93,12 @@ const WorkingHoursForm = ({action, data, clinicId}: ClinicFormType) => {
                                     : undefined
                                 }
                                 onChange={(selectedOption) => setWorkDay(selectedOption?.value!)}
-                                options={weekDays.map(day => ({
-                                    value: day.value,
-                                    label: day.label,
-                                }))}
+                                options={weekDays
+                                    .filter(day => !workingHoursData?.some(workingDay => workingDay?.day === day.value))
+                                    .map(day => ({
+                                        value: day.value,
+                                        label: day.label,
+                                    }))}
                             /> :
                             <Select
                                 isMulti
@@ -102,10 +111,12 @@ const WorkingHoursForm = ({action, data, clinicId}: ClinicFormType) => {
                                     : undefined
                                 }
                                 onChange={(selectedOption) => setWorkDay(selectedOption?.map(option => option.value!))}
-                                options={weekDays.map(day => ({
-                                    value: day.value,
-                                    label: day.label,
-                                }))}
+                                options={weekDays
+                                    .filter(day => !workingHoursData?.some(workingDay => workingDay?.day === day.value))
+                                    .map(day => ({
+                                        value: day.value,
+                                        label: day.label,
+                                    }))}
                             />
                     }
                 </div>

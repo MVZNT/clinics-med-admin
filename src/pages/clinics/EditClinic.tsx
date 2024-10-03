@@ -47,7 +47,12 @@ const EditClinic = () => {
 
             <div className={"bg-white p-4 rounded-md shadow flex flex-col gap-5"}>
                 <div className={"flex justify-end"}>
-                    <Button onClick={createWorkingHoursModal.onOpen}>+ Add working hours</Button>
+                    <Button
+                        onClick={createWorkingHoursModal.onOpen}
+                        className={`${workingHoursData?.length === 7 && "hidden"}`}
+                    >
+                        + Add working hours
+                    </Button>
                 </div>
 
                 {

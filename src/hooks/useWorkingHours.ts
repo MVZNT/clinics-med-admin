@@ -10,7 +10,8 @@ export const useGetWorkingHours = (clinicId: number) => {
         queryKey: [queryKeys.GET_WORKING_HOURS],
         queryFn: async () => {
             return await api.get(`/working-hours/${clinicId}`)
-        }
+        },
+        refetchOnWindowFocus: false
     }))
 }
 

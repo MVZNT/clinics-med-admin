@@ -52,6 +52,7 @@ export const useGetSingleClinic = (clinicId: number) => {
         queryFn: async () => {
             return await api.get(`/clinics/${clinicId}`)
         },
+        refetchOnWindowFocus: false
     });
 };
 
