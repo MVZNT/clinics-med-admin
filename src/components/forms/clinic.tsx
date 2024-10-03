@@ -15,7 +15,7 @@ import MultiUploader from "@/components/ui/multi-uploader.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import Select from "react-select"
-import {regionsData} from "@/constants";
+import {districtsData, regionsData} from "@/constants";
 
 
 type ClinicFormType = {
@@ -28,7 +28,8 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
     const [files, setFiles] = useState<File[]>([]);
 
     const [deletedImages, setDeletedImages] = useState<any>([]);
-    const [regionId, setRegionId] = useState<number>();
+    const [regionId, setRegionId] = useState<number>(data?.regionId!);
+    const [districtId, setDistrictId] = useState<number>(data?.districtId!);
 
     const createClinicMutation = useCreateClinic();
     const updateClinicMutation = useUpdateClinic()
@@ -78,6 +79,10 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
             formData.append("regionId", regionId.toString())
         }
 
+        if (districtId) {
+            formData.append("districtId", districtId.toString())
+        }
+
         if (values.website_url) {
             formData.append("website_url", values.website_url)
         }
@@ -113,7 +118,7 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="flex flex-col gap-5 bg-white p-4 border shadow rounded-md"
             >
-                <div className={"grid grid-cols-4 gap-5 "}>
+                <div className={"grid grid-cols-5 gap-5 "}>
                     <FormField
                         control={form.control}
                         name="name"
@@ -156,22 +161,41 @@ const ClinicForm = ({action, data}: ClinicFormType) => {
                         )}
                     />
 
-                    <div className={"flex flex-col gap-2"}>
-                        <span className={"text-sm font-medium"}>Region:</span>
+                    <div className={"flex flex-col gap-2 text-base w-full"}>
+                        <span className={"font-medium text-[#37352F]"}>Region</span>
                         <Select
+                            placeholder={"Choose"}
+                            onChange={(item) => setRegionId(item?.value!)}
                             options={regionsData.map(region => {
                                 return {
-                                    value: region.id,
                                     label: region.name,
+                                    value: region.id
                                 }
                             })}
-                            placeholder={"Choose"}
-                            className={"text-sm"}
                             defaultValue={data?.regionId ? {
                                 value: regionsData.find(region => region.id === data?.regionId)?.id,
                                 label: regionsData.find(region => region.id === data?.regionId)?.name,
                             } : undefined}
-                            onChange={(selectedOption: any) => setRegionId(selectedOption?.value)}
+                            className={"text-sm"}
+                        />
+                    </div>
+
+                    <div className={"flex flex-col gap-2 text-base"}>
+                        <span className={"font-medium text-[#37352F]"}>City</span>
+                        <Select
+                            placeholder={"Choose"}
+                            onChange={(item) => setDistrictId(item?.value!)}
+                            options={districtsData?.filter(district => district.region_id === regionId).map(district => {
+                                return {
+                                    label: district.name,
+                                    value: district.id
+                                }
+                            })}
+                            defaultValue={data?.districtId ? {
+                                value: districtsData.find(district => district.id === data?.districtId)?.id,
+                                label: districtsData.find(district => district.id === data?.districtId)?.name,
+                            } : undefined}
+                            className={"text-sm"}
                         />
                     </div>
                 </div>

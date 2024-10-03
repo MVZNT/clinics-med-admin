@@ -2,26 +2,24 @@ import {Navbar} from "../../components";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import ClinicsTable from "@/components/tables/clinics.tsx";
-import {useCreateClinicModal} from "@/hooks/useZustand.ts";
-import {DialogModal} from "@/components/ui/dialog.tsx";
-import ClinicForm from "@/components/forms/clinic.tsx";
 import {useEffect, useState} from "react";
 import {useDeleteClinic, useGetClinics} from "@/hooks/useClinic.ts";
 import {GetClinicsType} from "@/types/clinic";
 import {Pagination} from "antd";
 import StateShower from "@/components/stateShower.tsx";
+import {useNavigate} from "react-router-dom";
 
 const Clinics = () => {
     const [page, setPage] = useState<number>(1);
     const [limit, setLimit] = useState<number>(10);
     const [keyword, setKeyword] = useState<string>("");
 
-
     const getClinicsQuery = useGetClinics(page, limit, keyword);
     const clinicsData: GetClinicsType = getClinicsQuery.data?.data
 
-    const createClinicModal = useCreateClinicModal()
     const deleteClinicMutation = useDeleteClinic()
+
+    const navigate = useNavigate();
 
     const onDelete = (id: number) => {
         const isOk = confirm("Are you sure to delete clinic!")
@@ -37,22 +35,13 @@ const Clinics = () => {
     return (
         <>
             <Navbar name="Clinics"/>
-
-            <DialogModal
-                isOpen={createClinicModal.isOpen}
-                onClose={createClinicModal.onClose}
-                className={"w-[900px] mt-20"}
-            >
-                <ClinicForm action={"CREATE"}/>
-            </DialogModal>
-
-
+            
             <div className={"flex justify-between"}>
                 <div className={"w-1/4"}>
                     <Input placeholder={"Search"} onChange={(e) => setKeyword(e.target.value)}/>
                 </div>
 
-                <Button onClick={createClinicModal.onOpen}>+ Add clinic</Button>
+                <Button onClick={() => navigate("/create")}>+ Add clinic</Button>
             </div>
 
             {

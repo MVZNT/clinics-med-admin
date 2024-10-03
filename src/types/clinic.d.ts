@@ -14,6 +14,7 @@ export type ClinicType = {
     youtube_url: string
     telegram_url: string,
     regionId: number,
+    districtId: number,
     createdAt: string,
     updatedAt: string,
 }
