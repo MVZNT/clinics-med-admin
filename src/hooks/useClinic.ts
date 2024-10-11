@@ -35,7 +35,7 @@ export const useGetClinics = (page: number, limit: number, keyword?: string) => 
     return useQuery({
         queryKey: [queryKeys.GET_CLINICS],
         queryFn: async () => {
-            return await api.get("/clinics", {
+            return await api.get("/clinics/single", {
                 params: {
                     page,
                     limit,
