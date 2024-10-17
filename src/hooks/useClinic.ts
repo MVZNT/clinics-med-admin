@@ -50,7 +50,13 @@ export const useGetSingleClinic = (clinicId: number) => {
     return useQuery({
         queryKey: [queryKeys.GET_SINGLE_CLINIC],
         queryFn: async () => {
-            return await api.get(`/clinics/single/${clinicId}`)
+            return await api.get(`/clinics/single`, {
+                params: {
+                    clinicId,
+                    long: 1,
+                    lat: 1
+                }
+            })
         },
         refetchOnWindowFocus: false
     });
